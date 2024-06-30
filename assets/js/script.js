@@ -5,10 +5,10 @@ let bookImageContainer = $('#book-image');
 let bookMainContainer = $('.mainBookContainer');
 let movieMainContainer = $('.mainMovieContainer'); 
 
-function fetchMatchingBook() {
+function fetchMatchingBook(movieTitle) {
     const bookInfoUrl = 'https://www.googleapis.com/books/v1/volumes';
     const params = new URLSearchParams({
-        'q': searchItem.val(),
+        'q': movieTitle,
         'maxResults': 5
     }).toString();
 
@@ -39,6 +39,7 @@ function fetchMatchingBook() {
                 };
 
                 bookDetails.push(book);
+                console.log(`Book Data is : ${bookDetails}`)
             });
 
             return bookDetails;
@@ -85,7 +86,7 @@ function fetchMatchingMovie() {
                     imageLink: imageLink
                 };
             });
-
+            console.log(`Movie Data is : ${movieDetails}`)
             return movieDetails;
         })
         .catch(error => {
@@ -95,8 +96,9 @@ function fetchMatchingMovie() {
 
 searchButton.on('click', async () => {
     console.clear();
-    let bookData = await fetchMatchingBook();
+    
     let movieData = await fetchMatchingMovie();
+    let bookData = await fetchMatchingBook(movieData[0].title);
 
     bookMainContainer.empty();
     movieMainContainer.empty();
