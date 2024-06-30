@@ -1,45 +1,28 @@
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
+:root {
+    --feature: #C2405C;
+    --white: #FFFFFF;
+    --black: #232323;
+    --grey: #787878;
 }
 
 header {
-    background-color: #831010;
-    color: white;
-    padding: 15px;
-    text-align: center;
+    background-color: var(--feature);
 }
 
-.search-bar {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 20px 0;
+h1 {
+    color: var(--white);
 }
-  
+
 .search-bar input {
-    width: 60%;
-    padding: 10px;
-    font-size: 16px;
+    border: var(--black) 1px solid;
 }
-  
-.search-bar button {
-    width: 30%;
-    padding: 10px;
-    font-size: 16px;
-    margin-top: 10px;
+
+.search-bar input button {
+    padding-top: 20px;
+    margin-left: 4px;
+    margin-right: 4px;
 }
-  
-main {
-    display: flex;
-    justify-content: space-around;
-    padding: 20px;
-}
-  
+
 .mainMovieContainer , .mainBookContainer{
     width: 45%;
     height: 450px;
@@ -57,24 +40,3 @@ main {
     width: auto;
     margin-bottom: 20px;
 } 
-.container h2 {
-    margin-top: 0;
-}
-  
-.container img {
-    max-width: 100%;
-    height: auto;
-    margin-bottom: 10px;
-}
-  
-.container p {
-    flex-grow: 1;
-    text-align: center;
-}
-  
-footer {
-    text-align: center;
-    padding: 10px;
-    background-color: #f1f1f1;
-    margin-top: auto;
-}
