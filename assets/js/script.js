@@ -1,5 +1,9 @@
 let searchItem = $('#searchBar');
 let searchButton = $('#searchButton');
+let movieImageContainer = $('#movie-image');
+let bookImageContainer = $('#book-image');
+let bookMainContainer = $('.mainBookContainer');
+let movieMainContainer = $('.mainMovieContainer'); 
 
 function fetchMatchingBook() {
     const bookInfoUrl = 'https://www.googleapis.com/books/v1/volumes';
@@ -8,7 +12,7 @@ function fetchMatchingBook() {
         'maxResults': 5
     }).toString();
 
-    fetch(`${bookInfoUrl}?${params}`)
+    return fetch(`${bookInfoUrl}?${params}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error(`Error fetching data: ${response.status}`);
@@ -16,18 +20,28 @@ function fetchMatchingBook() {
             return response.json();
         })
         .then(data => {
-            console.log('The Book Data is:', data); // Log the entire response
+            let bookDetails = [];
 
             data.items.forEach(item => {
                 let volume_info = item.volumeInfo;
                 let title = volume_info.title;
                 let authors = volume_info.authors || ['Unknown'];
                 let description = volume_info.description || ['Unknown'];
-                console.log(`Title: ${title}`);
-                console.log(`Authors: ${authors.join(', ')}`);
-                console.log(`Description: ${description}`);
-                console.log("----");
+                let publishYear = volume_info.publishedDate || ['Unknown'];
+                let imageLink = volume_info.imageLinks ? volume_info.imageLinks.large || volume_info.imageLinks.extraLarge || volume_info.imageLinks.thumbnail : 'No Image Available';
+                
+                let book = {
+                    imageLink: imageLink,
+                    title: title,
+                    authors: authors.join(', '),
+                    publishYear: publishYear,
+                    description: description
+                };
+
+                bookDetails.push(book);
             });
+
+            return bookDetails;
         })
         .catch(error => {
             console.error(error.message);
@@ -46,7 +60,7 @@ function fetchMatchingMovie() {
         'page': 1
     }).toString();
 
-    fetch(`${movieInfoUrl}?${params}`, {
+    return fetch(`${movieInfoUrl}?${params}`, {
         headers: {
             'Authorization': `Bearer ${token}`
         }
@@ -58,29 +72,68 @@ function fetchMatchingMovie() {
             return response.json();
         })
         .then(data => {
-            console.log('The Movie Data is:', data); // Log the entire response
-
-            data.results.forEach(item => {
+            let movieDetails = data.results.map(item => {
                 let title = item.title;
                 let release_date = item.release_date || 'Unknown';
                 let description = item.overview || 'Unknown';
-                console.log(`Title: ${title}`);
-                console.log(`Release Date: ${release_date}`);
-                console.log(`Description: ${description}`);
-                console.log("----");
+                let imageLink = item.poster_path ? `https://image.tmdb.org/t/p/original${item.poster_path}` : 'No Image Available'; // Use /original for the highest resolution
+
+                return {
+                    title: title,
+                    release_date: release_date,
+                    description: description,
+                    imageLink: imageLink
+                };
             });
+
+            return movieDetails;
         })
         .catch(error => {
             console.error(error.message);
         });
 }
 
-
-
-
-
-searchButton.on('click', () => {
+searchButton.on('click', async () => {
     console.clear();
-    fetchMatchingBook();
-    fetchMatchingMovie();
+    let bookData = await fetchMatchingBook();
+    let movieData = await fetchMatchingMovie();
+
+    bookMainContainer.empty();
+    movieMainContainer.empty();
+
+    if (bookData && bookData.length > 0) {
+        let book = bookData[0];
+        let bookDescription = book.description;
+
+        if (bookDescription.length > 250) {
+            bookDescription = bookDescription.substring(0, 350) + "...";
+        }
+
+        let bookHeading = $('<h2>').text(book.title);
+        let bookImage = $('<img>').attr('src', book.imageLink);
+        let bookDescriptionElement = $('<p>').text(bookDescription);
+
+        // Append the elements to the bookMainContainer
+        bookMainContainer.append(bookHeading);
+        bookMainContainer.append(bookImage);
+        bookMainContainer.append(bookDescriptionElement);
+    }
+
+    if (movieData && movieData.length > 0) {
+        let movie = movieData[0];
+        let movieDescription = movie.description;
+
+        if (movieDescription.length > 250) {
+            movieDescription = movieDescription.substring(0, 350) + "...";
+        }
+
+        let movieHeading = $('<h2>').text(movie.title);
+        let movieImage = $('<img>').attr('src', movie.imageLink);
+        let movieDescriptionElement = $('<p>').text(movieDescription);
+
+        // Append the elements to the movieMainContainer
+        movieMainContainer.append(movieHeading);
+        movieMainContainer.append(movieImage);
+        movieMainContainer.append(movieDescriptionElement);
+    }
 });
