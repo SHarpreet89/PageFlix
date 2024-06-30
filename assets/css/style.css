@@ -40,7 +40,7 @@ main {
     padding: 20px;
 }
   
-.container {
+.mainMovieContainer , .mainBookContainer{
     width: 45%;
     height: 450px;
     border: 1px solid #ccc;
@@ -50,7 +50,13 @@ main {
     flex-direction: column;
     align-items: center;
 }
-  
+
+.mainMovieContainer  > img, .mainBookContainer > img {
+    min-height: 250px;
+    max-height: 250px;
+    width: auto;
+    margin-bottom: 20px;
+} 
 .container h2 {
     margin-top: 0;
 }
