@@ -23,9 +23,19 @@ h1 {
     margin-right: 4px;
 }
 
-.mainMovieContainer , .mainBookContainer{
+.booksPane , .moviesPane {
     width: 45%;
-    height: 450px;
+    min-height: 20vh;
+    padding: 10px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.mainMovieContainer , .mainBookContainer {
+    width: 100%;
+    height: 70vh;
     border: 1px solid #ccc;
     padding: 10px;
     box-sizing: border-box;
@@ -35,8 +45,15 @@ h1 {
 }
 
 .mainMovieContainer  > img, .mainBookContainer > img {
-    min-height: 250px;
-    max-height: 250px;
+    min-height: 500px;
+    max-height: 500px;
     width: auto;
     margin-bottom: 20px;
 } 
+
+#moreItemCard > img {
+    min-height: 150px;
+    max-height: 150px;
+    width: auto;
+    margin-bottom: 8px;
+}
