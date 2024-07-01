@@ -276,6 +276,6 @@ beginButton.onclick = function() {
 
 window.onclick = function() {
     if (event.target == modal) {
-        display.style.display = "none";
+        modal.style.display = "none";
     }
 }
