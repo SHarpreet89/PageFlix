@@ -4,6 +4,9 @@ let movieImageContainer = $('#movie-image');
 let bookImageContainer = $('#book-image');
 let bookMainContainer = $('.mainBookContainer');
 let movieMainContainer = $('.mainMovieContainer');
+var modal = document.getElementById("myModal");
+var btn = document.getElementById("beginButton");
+var span = document.getElementsByClassName("close")[0];
 let previousMovieData = [];
 let previousBookData = [];
 
@@ -322,3 +325,21 @@ searchButton.on('click', async () => {
 
     searchButton.removeData('source');
 });
+
+window.onload = function() {
+    modal.style.display = "flex";
+}
+
+span.onclick = function() {
+    modal.style.display = "none";
+}
+
+beginButton.onclick = function() {
+    modal.style.display = "none";
+}
+
+window.onclick = function() {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
