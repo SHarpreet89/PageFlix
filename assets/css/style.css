@@ -29,9 +29,7 @@ h1 {
 }
 
 .booksPane , .moviesPane {
-    width: 45%;
     min-height: 20vh;
-    padding: 10px;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
