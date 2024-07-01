@@ -129,7 +129,7 @@ function appendMainMovieData(movie) {
     if (movieDescription.length > 250) {
         movieDescription = movieDescription.substring(0, 250) + "...";
     }
-    let movieHeading = $('<h2>').text(movie.title);
+    let movieHeading = $('<h2 class="font-serif text-xl">').text(movie.title);
     let movieYear = $('<h3>').text(`Released: ${movie.release_date}`);
     let movieImage = $('<img>').attr({'src': movie.imageLink, 'alt': `${movie.title} Image`});
     let movieDescriptionElement = $('<p>').text(movieDescription);
@@ -151,7 +151,7 @@ function appendMainBookData(book) {
     if (bookDescription.length > 250) {
         bookDescription = bookDescription.substring(0, 250) + "...";
     }
-    let bookHeading = $('<h2>').text(book.title);
+    let bookHeading = $('<h2 class="font-serif text-xl">').text(book.title);
     let bookYear = $('<h3>').text(`Published: ${book.publishYear}`);
     let bookImage = $('<img>').attr({'src': book.imageLink, 'alt': `${book.title} Image`});
     let bookDescriptionElement = $('<p>').text(bookDescription);
@@ -172,7 +172,7 @@ function appendMovieData(movieData) {
         let subMovieContainer = $('<div>').addClass('subContainer movieSubContainer'); // Added a specific class for movie sub-container
 
         for (let i = 1; i < movieData.length && i < 5; i++) {
-            let moreMoviesHeading = $('<h3>').text(movieData[i].title.substring(0, 25) + (movieData[i].title.length > 25 ? '...' : '')).data('fullTitle', movieData[i].title);
+            let moreMoviesHeading = $('<h3 class="font-serif text-lg">').text(movieData[i].title.substring(0, 25) + (movieData[i].title.length > 25 ? '...' : '')).data('fullTitle', movieData[i].title);
             let moreMoviesYear = $('<h4>').text(`Released: ${movieData[i].release_date}`);
             let moreMoviesImage = $('<img>').attr({
                 'src': movieData[i].imageLink ? movieData[i].imageLink : './assets/images/MoviePlaceHolder.jpg',
@@ -215,7 +215,7 @@ function appendSecondaryMovieData(movieData, excludeId) {
 
     for (let i = 0; i < movieData.length && i < 5; i++) {
         if (movieData[i].id !== excludeId) {
-            let moreMoviesHeading = $('<h3>').text(movieData[i].title.substring(0, 25) + (movieData[i].title.length > 25 ? '...' : '')).data('fullTitle', movieData[i].title);
+            let moreMoviesHeading = $('<h3 class="font-serif text-lg">').text(movieData[i].title.substring(0, 25) + (movieData[i].title.length > 25 ? '...' : '')).data('fullTitle', movieData[i].title);
             let moreMoviesYear = $('<h4>').text(`Released: ${movieData[i].release_date}`);
             let moreMoviesImage = $('<img>').attr({
                 'src': movieData[i].imageLink ? movieData[i].imageLink : './assets/images/MoviePlaceHolder.jpg',
@@ -240,7 +240,7 @@ function appendBookData(bookData) {
         let subBooksContainer = $('<div>').addClass('subContainer bookSubContainer'); // Added a specific class for book sub-container
 
         for (let i = 1; i < bookData.length && i < 5; i++) {
-            let moreBooksHeading = $('<h3>').text(bookData[i].title.substring(0, 25) + (bookData[i].title.length > 25 ? '...' : '')).data('fullTitle', bookData[i].title);
+            let moreBooksHeading = $('<h3 class="font-serif text-lg">').text(bookData[i].title.substring(0, 25) + (bookData[i].title.length > 25 ? '...' : '')).data('fullTitle', bookData[i].title);
             let moreBooksYear = $('<h4>').text(`Published: ${bookData[i].publishYear}`);
             let moreBooksImage = $('<img>').attr({
                 'src': bookData[i].imageLink ? bookData[i].imageLink : './assets/images/BookPlaceHolder.jpg',
@@ -283,7 +283,7 @@ function appendSecondaryBookData(bookData, excludeId) {
 
     for (let i = 0; i < bookData.length && i < 5; i++) {
         if (bookData[i].id !== excludeId) {
-            let moreBooksHeading = $('<h3>').text(bookData[i].title.substring(0, 25) + (bookData[i].title.length > 25 ? '...' : '')).data('fullTitle', bookData[i].title);
+            let moreBooksHeading = $('<h3 class="font-serif text-lg">').text(bookData[i].title.substring(0, 25) + (bookData[i].title.length > 25 ? '...' : '')).data('fullTitle', bookData[i].title);
             let moreBooksYear = $('<h4>').text(`Published: ${bookData[i].publishYear}`);
             let moreBooksImage = $('<img>').attr({
                 'src': bookData[i].imageLink ? bookData[i].imageLink : './assets/images/BookPlaceHolder.jpg',
