@@ -5,7 +5,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+    <link
+      rel="stylesheet"
+      href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"
+    />
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -28,42 +31,47 @@
     </script>
   </head>
 
-  <body>
+  <body class="flex flex-col min-h-screen">
     <header class="sticky top-0 text-center text-5xl p-4">
       <h1 class="font-serif">PageFlix.</h1>
     </header>
 
     <div class="search-bar flex justify-center p-2 pt-5 mx-1">
-      <input id="searchBar"
+      <input
+        id="searchBar"
         type="text"
         placeholder="Search your favourite book..."
         class="w-full lg:w-96 mr-1 rounded p-2"
       />
-      <button id="searchButton"
+      <button
+        id="searchButton"
         class="bg-transparent hover:bg-[#232323] text-[#232323] font-semibold hover:text-white py-2 px-4 border border-[#C2405C] hover:border-transparent rounded"
       >
         Search
       </button>
     </div>
 
-    <main class="flex lg:flex-nowrap flex-wrap h-dvh">
-      <div id="historyPane">
-      </div>
-      <div id ="masterContainer">      
-        <div class="booksPane">
+    <main class="flex flex-col lg:flex-row flex-grow">
+      <div id="historyPane"></div>
+
+      <div
+        id="masterContainer"
+        class="flex flex-col lg:flex-row justify-center items-center w-full"
+      >
+        <div class="booksPane w-full lg:w-1/2 p-2 flex flex-col items-center">
           <h1>BOOKS</h1>
           <div
-            class="mainBookContainer m-3 border border-black rounded-lg bg-[#d4d4d4] text-center"
+            class="mainBookContainer m-3 border border-black rounded-lg bg-[#d4d4d4] text-center w-full p-4"
           >
             <h2>Book Card</h2>
             <p>...Book Details...</p>
           </div>
         </div>
 
-        <div class="moviesPane">
+        <div class="moviesPane w-full lg:w-1/2 p-2 flex flex-col items-center">
           <h1>MOVIES</h1>
           <div
-            class="mainMovieContainer m-3 border border-black rounded-lg bg-[#d4d4d4] text-center"
+            class="mainMovieContainer m-3 border border-black rounded-lg bg-[#d4d4d4] text-center w-full p-4"
           >
             <h2>Movie Card</h2>
             <p>...Movie Details...</p>
@@ -86,13 +94,18 @@
     <footer class="bg-[#C2405C] text-center text-white p-2">
       2024 Pageflix.
     </footer>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
-    crossorigin="anonymous"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+      crossorigin="anonymous"
+    ></script>
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.3/dayjs.min.js"
-    integrity="sha256-iu/zLUB+QgISXBLCW/mcDi/rnf4m4uEDO0wauy76x7U=" crossorigin="anonymous"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/dayjs@1.11.3/dayjs.min.js"
+      integrity="sha256-iu/zLUB+QgISXBLCW/mcDi/rnf4m4uEDO0wauy76x7U="
+      crossorigin="anonymous"
+    ></script>
     <script src="./assets/js/script.js"></script>
   </body>
 </html>
