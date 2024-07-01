@@ -50,31 +50,33 @@
         Search
       </button>
     </div>
+    <div id="historyPane" class="border border-black rounded-lg py-2 px-4 mx-2">
+      <h2 class="text-base">Recent Searches:</h2>
+      <p></p>
+    </div>
 
-    <main class="flex flex-col lg:flex-row flex-grow">
-      <div id="historyPane"></div>
-
+    <main class="flex flex-col lg:flex-row flex-grow items-start">
       <div
         id="masterContainer"
-        class="flex flex-col lg:flex-row justify-center items-center w-full"
+        class="flex flex-grow flex-col lg:flex-row justify-center items-center w-full items-start"
       >
-        <div class="booksPane w-full lg:w-1/2 p-2 flex flex-col items-center">
+        <div class="booksPane w-full lg:w-1/2 p-2 flex flex-col flex-grow items-center">
           <h1>BOOKS</h1>
           <div
-            class="mainBookContainer m-3 border border-black rounded-lg bg-[#d4d4d4] text-center w-full p-4"
+            class="mainBookContainer flex-grow h-full m-3 border border-black rounded-lg bg-[#d4d4d4] text-center w-full p-4"
           >
-            <h2>Book Card</h2>
-            <p>...Book Details...</p>
+            <h2 class="font-serif text-xl">See if your favourite book...</h2>
+            <p></p>
           </div>
         </div>
 
         <div class="moviesPane w-full lg:w-1/2 p-2 flex flex-col items-center">
           <h1>MOVIES</h1>
           <div
-            class="mainMovieContainer m-3 border border-black rounded-lg bg-[#d4d4d4] text-center w-full p-4"
+            class="mainMovieContainer flex-grow h-full m-3 border border-black rounded-lg bg-[#d4d4d4] text-center w-full p-4"
           >
-            <h2>Movie Card</h2>
-            <p>...Movie Details...</p>
+            <h2 class="font-serif text-xl">...has been made into a movie!</h2>
+            <p></p>
           </div>
         </div>
       </div>

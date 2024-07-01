@@ -36,6 +36,10 @@ h1 {
     align-items: center;
 }
 
+#masterContainer {
+    align-items: start;
+}
+
 .mainMovieContainer , .mainBookContainer {
     width: 100%;
     height: 80vh;
