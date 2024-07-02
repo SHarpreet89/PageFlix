@@ -18,7 +18,7 @@ function fetchMatchingBook(bookTitle = '', bookId = '') {
     console.log(`Fetching books for: ${bookTitle || searchItem.val()}`);
     const bookInfoUrl = bookId ? `https://www.googleapis.com/books/v1/volumes/${bookId}` : 'https://www.googleapis.com/books/v1/volumes';
     const params = new URLSearchParams({
-        'q': simplifyTitle(bookTitle || searchItem.val()),
+        'q': (bookTitle || searchItem.val()),
         'maxResults': 5
     }).toString();
 
@@ -39,7 +39,7 @@ function fetchMatchingBook(bookTitle = '', bookId = '') {
                 let authors = volume_info.authors || ['Unknown'];
                 let description = volume_info.description || 'Unknown';
                 let publishYear = volume_info.publishedDate || 'Unknown';
-                let imageLink = volume_info.imageLinks ? volume_info.imageLinks.large || volume_info.imageLinks.extraLarge || volume_info.imageLinks.thumbnail : 'No Image Available';
+                let imageLink = volume_info.imageLinks ? volume_info.imageLinks.medium || volume_info.imageLinks.thumbnail : './assets/images/BookPlaceHolder.jpg';
 
                 let book = {
                     id: item.id,
@@ -51,8 +51,6 @@ function fetchMatchingBook(bookTitle = '', bookId = '') {
                 };
 
                 bookDetails.push(book);
-                console.log('Book Data:', bookDetails);
-                //console.table(bookDetails);
             });
 
             return bookDetails;
@@ -70,7 +68,7 @@ function fetchMatchingMovie(movieTitle = '', movieId = '') {
 
     const params = new URLSearchParams({
         'api_key': apiKey,
-        'query': simplifyTitle(movieTitle || searchItem.val()),
+        'query': (movieTitle || searchItem.val()),
         'page': 1
     }).toString();
 
@@ -91,7 +89,7 @@ function fetchMatchingMovie(movieTitle = '', movieId = '') {
                 let title = item.title;
                 let release_date = item.release_date || 'Unknown';
                 let description = item.overview || 'Unknown';
-                let imageLink = item.poster_path ? `https://image.tmdb.org/t/p/original${item.poster_path}` : 'No Image Available';
+                let imageLink = item.poster_path ? `https://image.tmdb.org/t/p/original${item.poster_path}` : './assets/images/MoviePlaceHolder.jpg';
 
                 return {
                     id: item.id,
@@ -101,14 +99,16 @@ function fetchMatchingMovie(movieTitle = '', movieId = '') {
                     imageLink: imageLink
                 };
             });
-            console.log('Movie Data:', movieDetails);
-            //console.table(movieDetails);
 
             return movieDetails;
         })
         .catch(error => {
             console.error(error.message);
         });
+}
+
+function createSubContainer(className) {
+    return $('<div>').addClass(`subContainer ${className}`);
 }
 
 function addMoreItemCard(heading, year, image, description, container) {
@@ -134,10 +134,7 @@ function appendMainMovieData(movie) {
     let movieImage = $('<img>').attr({'src': movie.imageLink, 'alt': `${movie.title} Image`});
     let movieDescriptionElement = $('<p>').text(movieDescription);
 
-    movieMainContainer.append(movieHeading);
-    movieMainContainer.append(movieYear);
-    movieMainContainer.append(movieImage);
-    movieMainContainer.append(movieDescriptionElement);
+    movieMainContainer.append(movieHeading, movieYear, movieImage, movieDescriptionElement);
 }
 
 function appendMainBookData(book) {
@@ -156,20 +153,16 @@ function appendMainBookData(book) {
     let bookImage = $('<img>').attr({'src': book.imageLink, 'alt': `${book.title} Image`});
     let bookDescriptionElement = $('<p>').text(bookDescription);
 
-    bookMainContainer.append(bookHeading);
-    bookMainContainer.append(bookYear);
-    bookMainContainer.append(bookImage);
-    bookMainContainer.append(bookDescriptionElement);
+    bookMainContainer.append(bookHeading, bookYear, bookImage, bookDescriptionElement);
 }
 
 function appendMovieData(movieData) {
     movieMainContainer.empty();
     previousMovieData = movieData; // Store the previous movie data
-    console.log('Previous Movie Data is:', JSON.stringify(previousMovieData, null, 2));
     if (movieData && movieData.length > 0) {
         appendMainMovieData(movieData[0]);
 
-        let subMovieContainer = $('<div>').addClass('subContainer movieSubContainer'); // Added a specific class for movie sub-container
+        let subMovieContainer = createSubContainer('movieSubContainer'); // Create sub-container here
 
         for (let i = 1; i < movieData.length && i < 5; i++) {
             let moreMoviesHeading = $('<h3 class="font-serif text-lg">').text(movieData[i].title.substring(0, 25) + (movieData[i].title.length > 25 ? '...' : '')).data('fullTitle', movieData[i].title);
@@ -185,7 +178,7 @@ function appendMovieData(movieData) {
 
         movieMainContainer.append(subMovieContainer); // Append the sub-container here
 
-        subMovieContainer.on('click', '#moreItemCard', function() {
+        subMovieContainer.off('click').on('click', '#moreItemCard', function() {
             let movieId = $(this).find('img').data('id');
             console.log(`Clicked on movie ID: ${movieId}`);
             fetchMatchingMovie('', movieId).then(movieData => {
@@ -197,23 +190,24 @@ function appendMovieData(movieData) {
                 });
                 fetchMatchingMovie(movieTitle).then(subMovieData => {
                     if (subMovieData.length <= 1) {
-                        console.log(`Appending submovie data with previous data: ${JSON.stringify(previousMovieData, null, 2)}`);
                         appendSecondaryMovieData(previousMovieData.filter(movie => movie.id !== movieId), movieId);
                     } else {
-                        console.log(`Appending submovie data with plenty of data: ${JSON.stringify(subMovieData, null, 2)}`);
                         appendSecondaryMovieData(subMovieData.filter(movie => movie.id !== movieId), movieId);
                     }
                 });
             });
         });
+    } else {
+        movieMainContainer.append('<p>OPPS, POPCORN AWAITS BUT THIS SEARCH RETURNED NOTHING, PLEASE TRY AGAIN.</p>');
     }
 }
 
 function appendSecondaryMovieData(movieData, excludeId) {
-    let subMovieContainer = $('.movieSubContainer');
-    subMovieContainer.empty();
+    console.log(`Appending Secondary Movie Data`);
+    let subMovieContainer = createSubContainer('movieSubContainer'); // Create sub-container here
 
     for (let i = 0; i < movieData.length && i < 5; i++) {
+        console.log(`Movie being appended is ${movieData[i].title}`);
         if (movieData[i].id !== excludeId) {
             let moreMoviesHeading = $('<h3 class="font-serif text-lg">').text(movieData[i].title.substring(0, 25) + (movieData[i].title.length > 25 ? '...' : '')).data('fullTitle', movieData[i].title);
             let moreMoviesYear = $('<h4>').text(`Released: ${movieData[i].release_date}`);
@@ -228,16 +222,35 @@ function appendSecondaryMovieData(movieData, excludeId) {
     }
 
     movieMainContainer.append(subMovieContainer); // Ensure sub-container is appended here as well
+
+    subMovieContainer.off('click').on('click', '#moreItemCard', function() {
+        let movieId = $(this).find('img').data('id');
+        console.log(`Clicked on movie ID: ${movieId}`);
+        fetchMatchingMovie('', movieId).then(movieData => {
+            movieMainContainer.empty(); // Clear the main container before appending new main item
+            appendMainMovieData(movieData[0]);
+            let movieTitle = movieData[0].title;
+            fetchMatchingBook(movieTitle).then(bookData => {
+                appendBookData(bookData);
+            });
+            fetchMatchingMovie(movieTitle).then(subMovieData => {
+                if (subMovieData.length <= 1) {
+                    appendSecondaryMovieData(previousMovieData.filter(movie => movie.id !== movieId), movieId);
+                } else {
+                    appendSecondaryMovieData(subMovieData.filter(movie => movie.id !== movieId), movieId);
+                }
+            });
+        });
+    });
 }
 
 function appendBookData(bookData) {
     bookMainContainer.empty();
     previousBookData = bookData; // Store the previous book data
-    console.log('Previous Book Data is:', JSON.stringify(previousBookData, null, 2));
     if (bookData && bookData.length > 0) {
         appendMainBookData(bookData[0]);
 
-        let subBooksContainer = $('<div>').addClass('subContainer bookSubContainer'); // Added a specific class for book sub-container
+        let subBooksContainer = createSubContainer('bookSubContainer'); // Create sub-container here
 
         for (let i = 1; i < bookData.length && i < 5; i++) {
             let moreBooksHeading = $('<h3 class="font-serif text-lg">').text(bookData[i].title.substring(0, 25) + (bookData[i].title.length > 25 ? '...' : '')).data('fullTitle', bookData[i].title);
@@ -253,7 +266,7 @@ function appendBookData(bookData) {
 
         bookMainContainer.append(subBooksContainer); // Append the sub-container here
 
-        subBooksContainer.on('click', '#moreItemCard', function() {
+        subBooksContainer.off('click').on('click', '#moreItemCard', function() {
             let bookId = $(this).find('img').data('id');
             console.log(`Clicked on book ID: ${bookId}`);
             fetchMatchingBook('', bookId).then(bookData => {
@@ -265,21 +278,21 @@ function appendBookData(bookData) {
                 });
                 fetchMatchingBook(bookTitle).then(subBookData => {
                     if (subBookData.length <= 1) {
-                        console.log(`Appending subbook data with previous data: ${JSON.stringify(previousBookData, null, 2)}`);
                         appendSecondaryBookData(previousBookData.filter(book => book.id !== bookId), bookId);
                     } else {
-                        console.log(`Appending subbook data with plenty of data: ${JSON.stringify(subBookData, null, 2)}`);
                         appendSecondaryBookData(subBookData.filter(book => book.id !== bookId), bookId);
                     }
                 });
             });
         });
+    } else {
+        bookMainContainer.append('<p>OOPS, NO BOOKS HAVE BEEN FOUND, BUT TRY AGAIN AND YOU WILL LIKELY FIND A GOOD READ!</p>');
     }
 }
 
 function appendSecondaryBookData(bookData, excludeId) {
-    let subBooksContainer = $('.bookSubContainer');
-    subBooksContainer.empty();
+    console.log(`Appending Secondary Book Data`);
+    let subBooksContainer = createSubContainer('bookSubContainer'); // Create sub-container here
 
     for (let i = 0; i < bookData.length && i < 5; i++) {
         if (bookData[i].id !== excludeId) {
@@ -296,6 +309,26 @@ function appendSecondaryBookData(bookData, excludeId) {
     }
 
     bookMainContainer.append(subBooksContainer); // Ensure sub-container is appended here as well
+
+    subBooksContainer.off('click').on('click', '#moreItemCard', function() {
+        let bookId = $(this).find('img').data('id');
+        console.log(`Clicked on book ID: ${bookId}`);
+        fetchMatchingBook('', bookId).then(bookData => {
+            bookMainContainer.empty(); // Clear the main container before appending new main item
+            appendMainBookData(bookData[0]);
+            let bookTitle = bookData[0].title;
+            fetchMatchingMovie(bookTitle).then(movieData => {
+                appendMovieData(movieData);
+            });
+            fetchMatchingBook(bookTitle).then(subBookData => {
+                if (subBookData.length <= 1) {
+                    appendSecondaryBookData(previousBookData.filter(book => book.id !== bookId), bookId);
+                } else {
+                    appendSecondaryBookData(subBookData.filter(book => book.id !== bookId), bookId);
+                }
+            });
+        });
+    });
 }
 
 searchButton.on('click', async () => {
@@ -311,6 +344,8 @@ searchButton.on('click', async () => {
             appendBookData(bookData);
         } else {
             console.log('No movie data found');
+            movieMainContainer.empty();
+            movieMainContainer.append('<p>OPPS, POPCORN AWAITS BUT THIS SEARCH RETURNED NOTHING, PLEASE TRY AGAIN.</p>');
         }
     } else if (source === 'book') {
         let bookData = await fetchMatchingBook();
@@ -320,6 +355,8 @@ searchButton.on('click', async () => {
             appendMovieData(movieData);
         } else {
             console.log('No book data found');
+            bookMainContainer.empty();
+            bookMainContainer.append('<p>OOPS, NO BOOKS HAVE BEEN FOUND, BUT TRY AGAIN AND YOU WILL LIKELY FIND A GOOD READ!</p>');
         }
     }
 
@@ -338,7 +375,7 @@ beginButton.onclick = function() {
     modal.style.display = "none";
 }
 
-window.onclick = function() {
+window.onclick = function(event) {
     if (event.target == modal) {
         modal.style.display = "none";
     }
