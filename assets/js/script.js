@@ -9,6 +9,7 @@ var btn = document.getElementById("beginButton");
 var span = document.getElementsByClassName("close")[0];
 let previousMovieData = [];
 let previousBookData = [];
+let history = JSON.parse(localStorage.getItem('search-history')) || [];
 
 function simplifyTitle(title) {
     return title.replace(/[^a-zA-Z0-9 ]/g, '').split(' ').slice(0, 3).join(' ');
@@ -185,6 +186,7 @@ function appendMovieData(movieData) {
                 movieMainContainer.empty(); // Clear the main container before appending new main item
                 appendMainMovieData(movieData[0]);
                 let movieTitle = movieData[0].title;
+                saveSearchTerm(movieTitle);
                 fetchMatchingBook(movieTitle).then(bookData => {
                     appendBookData(bookData);
                 });
@@ -222,26 +224,6 @@ function appendSecondaryMovieData(movieData, excludeId) {
     }
 
     movieMainContainer.append(subMovieContainer); // Ensure sub-container is appended here as well
-
-    subMovieContainer.off('click').on('click', '#moreItemCard', function() {
-        let movieId = $(this).find('img').data('id');
-        console.log(`Clicked on movie ID: ${movieId}`);
-        fetchMatchingMovie('', movieId).then(movieData => {
-            movieMainContainer.empty(); // Clear the main container before appending new main item
-            appendMainMovieData(movieData[0]);
-            let movieTitle = movieData[0].title;
-            fetchMatchingBook(movieTitle).then(bookData => {
-                appendBookData(bookData);
-            });
-            fetchMatchingMovie(movieTitle).then(subMovieData => {
-                if (subMovieData.length <= 1) {
-                    appendSecondaryMovieData(previousMovieData.filter(movie => movie.id !== movieId), movieId);
-                } else {
-                    appendSecondaryMovieData(subMovieData.filter(movie => movie.id !== movieId), movieId);
-                }
-            });
-        });
-    });
 }
 
 function appendBookData(bookData) {
@@ -273,6 +255,7 @@ function appendBookData(bookData) {
                 bookMainContainer.empty(); // Clear the main container before appending new main item
                 appendMainBookData(bookData[0]);
                 let bookTitle = bookData[0].title;
+                saveSearchTerm(bookTitle);
                 fetchMatchingMovie(bookTitle).then(movieData => {
                     appendMovieData(movieData);
                 });
@@ -309,30 +292,15 @@ function appendSecondaryBookData(bookData, excludeId) {
     }
 
     bookMainContainer.append(subBooksContainer); // Ensure sub-container is appended here as well
-
-    subBooksContainer.off('click').on('click', '#moreItemCard', function() {
-        let bookId = $(this).find('img').data('id');
-        console.log(`Clicked on book ID: ${bookId}`);
-        fetchMatchingBook('', bookId).then(bookData => {
-            bookMainContainer.empty(); // Clear the main container before appending new main item
-            appendMainBookData(bookData[0]);
-            let bookTitle = bookData[0].title;
-            fetchMatchingMovie(bookTitle).then(movieData => {
-                appendMovieData(movieData);
-            });
-            fetchMatchingBook(bookTitle).then(subBookData => {
-                if (subBookData.length <= 1) {
-                    appendSecondaryBookData(previousBookData.filter(book => book.id !== bookId), bookId);
-                } else {
-                    appendSecondaryBookData(subBookData.filter(book => book.id !== bookId), bookId);
-                }
-            });
-        });
-    });
 }
 
 searchButton.on('click', async () => {
     console.clear();
+    let searchTerm = searchItem.val().trim();
+    if (!searchTerm) return;
+
+    saveSearchTerm(searchTerm);
+
     let source = searchButton.data('source') || 'movie';
     console.log(`Search initiated from source: ${source}`);
 
@@ -379,4 +347,30 @@ window.onclick = function(event) {
     if (event.target == modal) {
         modal.style.display = "none";
     }
+}
+
+function loadSearchHistory() {
+    let history = JSON.parse(localStorage.getItem('search-history')) || [];
+    let searchHistoryList = $('#search-history');
+    searchHistoryList.empty();
+    history.forEach(item => {
+        let button = $('<button>')
+        .text(item)
+        .addClass('history-button')
+        .on('click', function() {
+            searchItem.val(item);
+            searchButton.click();
+        })
+        let div =$('<div>').append(button);
+        searchHistoryList.append(div);
+    })
+}
+
+function saveSearchTerm(term) {
+    let history = JSON.parse(localStorage.getItem('search-history')) || [];
+    if (!history.includes(term)) {
+        history.push(term)
+        localStorage.setItem('search-history', JSON.stringify(history));
+    }
+    loadSearchHistory();
 }
