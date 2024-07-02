@@ -361,8 +361,8 @@ function loadSearchHistory() {
             searchItem.val(item);
             searchButton.click();
         })
-        let div =$('<div>').append(button);
-        searchHistoryList.append(div);
+        let historyItem =$('<div>').append(button);
+        searchHistoryList.append(historyItem);
     })
 }
 
