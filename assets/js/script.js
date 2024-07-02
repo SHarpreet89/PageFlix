@@ -300,6 +300,11 @@ function appendSecondaryBookData(bookData, excludeId) {
 
 searchButton.on('click', async () => {
     console.clear();
+    let searchTerm = searchItem.val().trim();
+    if (!searchTerm) return;
+
+    saveSearchTerm(searchTerm);
+
     let source = searchButton.data('source') || 'movie';
     console.log(`Search initiated from source: ${source}`);
 
@@ -342,4 +347,30 @@ window.onclick = function() {
     if (event.target == modal) {
         modal.style.display = "none";
     }
+}
+
+function loadSearchHistory() {
+    let history = JSON.parse(localStorage.getItem('search-history')) || [];
+    let searchHistoryList = $('#search-history');
+    searchHistoryList.empty();
+    history.forEach(item => {
+        let button = $('<button>')
+        .text(item)
+        .addClass('history-button')
+        .on('click', function() {
+            searchItem.val(item);
+            searchButton.click();
+        })
+        let div =$('<div>').append(button);
+        searchHistoryList.append(div);
+    })
+}
+
+function saveSearchTerm(term) {
+    let history = JSON.parse(localStorage.getItem('search-history')) || [];
+    if (!history.includes(term)) {
+        history.push(term)
+        localStorage.setItem('search-history', JSON.stringify(history));
+    }
+    loadSearchHistory();
 }
