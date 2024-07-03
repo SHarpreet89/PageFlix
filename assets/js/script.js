@@ -1,3 +1,5 @@
+let history = JSON.parse(localStorage.getItem('search-history')) || [];
+
 let searchItem = $('#searchBar');
 let searchButton = $('#searchButton');
 let movieImageContainer = $('#movie-image');
@@ -9,7 +11,6 @@ var btn = document.getElementById("beginButton");
 var span = document.getElementsByClassName("close")[0];
 let previousMovieData = [];
 let previousBookData = [];
-let history = JSON.parse(localStorage.getItem('search-history')) || [];
 
 function simplifyTitle(title) {
     return title.replace(/[^a-zA-Z0-9 ]/g, '').split(' ').slice(0, 3).join(' ');
@@ -182,22 +183,7 @@ function appendMovieData(movieData) {
         subMovieContainer.off('click').on('click', '#moreItemCard', function() {
             let movieId = $(this).find('img').data('id');
             console.log(`Clicked on movie ID: ${movieId}`);
-            fetchMatchingMovie('', movieId).then(movieData => {
-                movieMainContainer.empty(); // Clear the main container before appending new main item
-                appendMainMovieData(movieData[0]);
-                let movieTitle = movieData[0].title;
-                saveSearchTerm(movieTitle);
-                fetchMatchingBook(movieTitle).then(bookData => {
-                    appendBookData(bookData);
-                });
-                fetchMatchingMovie(movieTitle).then(subMovieData => {
-                    if (subMovieData.length <= 1) {
-                        appendSecondaryMovieData(previousMovieData.filter(movie => movie.id !== movieId), movieId);
-                    } else {
-                        appendSecondaryMovieData(subMovieData.filter(movie => movie.id !== movieId), movieId);
-                    }
-                });
-            });
+            handleMovieCardClick(movieId);
         });
     } else {
         movieMainContainer.append('<p>OPPS, POPCORN AWAITS BUT THIS SEARCH RETURNED NOTHING, PLEASE TRY AGAIN.</p>');
@@ -224,6 +210,12 @@ function appendSecondaryMovieData(movieData, excludeId) {
     }
 
     movieMainContainer.append(subMovieContainer); // Ensure sub-container is appended here as well
+
+    subMovieContainer.off('click').on('click', '#moreItemCard', function() {
+        let movieId = $(this).find('img').data('id');
+        console.log(`Clicked on movie ID: ${movieId}`);
+        handleMovieCardClick(movieId);
+    });
 }
 
 function appendBookData(bookData) {
@@ -251,22 +243,7 @@ function appendBookData(bookData) {
         subBooksContainer.off('click').on('click', '#moreItemCard', function() {
             let bookId = $(this).find('img').data('id');
             console.log(`Clicked on book ID: ${bookId}`);
-            fetchMatchingBook('', bookId).then(bookData => {
-                bookMainContainer.empty(); // Clear the main container before appending new main item
-                appendMainBookData(bookData[0]);
-                let bookTitle = bookData[0].title;
-                saveSearchTerm(bookTitle);
-                fetchMatchingMovie(bookTitle).then(movieData => {
-                    appendMovieData(movieData);
-                });
-                fetchMatchingBook(bookTitle).then(subBookData => {
-                    if (subBookData.length <= 1) {
-                        appendSecondaryBookData(previousBookData.filter(book => book.id !== bookId), bookId);
-                    } else {
-                        appendSecondaryBookData(subBookData.filter(book => book.id !== bookId), bookId);
-                    }
-                });
-            });
+            handleBookCardClick(bookId);
         });
     } else {
         bookMainContainer.append('<p>OOPS, NO BOOKS HAVE BEEN FOUND, BUT TRY AGAIN AND YOU WILL LIKELY FIND A GOOD READ!</p>');
@@ -292,6 +269,50 @@ function appendSecondaryBookData(bookData, excludeId) {
     }
 
     bookMainContainer.append(subBooksContainer); // Ensure sub-container is appended here as well
+
+    subBooksContainer.off('click').on('click', '#moreItemCard', function() {
+        let bookId = $(this).find('img').data('id');
+        console.log(`Clicked on book ID: ${bookId}`);
+        handleBookCardClick(bookId);
+    });
+}
+
+function handleBookCardClick(bookId) {
+    fetchMatchingBook('', bookId).then(bookData => {
+        bookMainContainer.empty(); // Clear the main container before appending new main item
+        appendMainBookData(bookData[0]);
+        let bookTitle = bookData[0].title;
+        saveSearchTerm(bookTitle);
+        fetchMatchingMovie(bookTitle).then(movieData => {
+            appendMovieData(movieData);
+        });
+        fetchMatchingBook(bookTitle).then(subBookData => {
+            if (subBookData.length <= 1) {
+                appendSecondaryBookData(previousBookData.filter(book => book.id !== bookId), bookId);
+            } else {
+                appendSecondaryBookData(subBookData.filter(book => book.id !== bookId), bookId);
+            }
+        });
+    });
+}
+
+function handleMovieCardClick(movieId) {
+    fetchMatchingMovie('', movieId).then(movieData => {
+        movieMainContainer.empty(); // Clear the main container before appending new main item
+        appendMainMovieData(movieData[0]);
+        let movieTitle = movieData[0].title;
+        saveSearchTerm(movieTitle);
+        fetchMatchingBook(movieTitle).then(bookData => {
+            appendBookData(bookData);
+        });
+        fetchMatchingMovie(movieTitle).then(subMovieData => {
+            if (subMovieData.length <= 1) {
+                appendSecondaryMovieData(previousMovieData.filter(movie => movie.id !== movieId), movieId);
+            } else {
+                appendSecondaryMovieData(subMovieData.filter(movie => movie.id !== movieId), movieId);
+            }
+        });
+    });
 }
 
 searchButton.on('click', async () => {
@@ -333,6 +354,7 @@ searchButton.on('click', async () => {
 
 window.onload = function() {
     modal.style.display = "flex";
+    loadSearchHistory();
 }
 
 span.onclick = function() {
@@ -356,20 +378,22 @@ function loadSearchHistory() {
     history.forEach(item => {
         let button = $('<button>')
         .text(item)
-        .addClass('history-button')
+        .addClass('history-button bg-transparent hover:bg-[#232323] text-[#232323] font-semibold hover:text-white py-2 px-4 border border-[#C2405C] hover:border-transparent rounded')
         .on('click', function() {
             searchItem.val(item);
             searchButton.click();
         })
-        let historyItem =$('<div>').append(button);
-        searchHistoryList.append(historyItem);
+        let searchedItem =$('<div>').append(button);
+        searchHistoryList.append(searchedItem);
     })
 }
 
 function saveSearchTerm(term) {
-    let history = JSON.parse(localStorage.getItem('search-history')) || [];
     if (!history.includes(term)) {
-        history.push(term)
+        if(history.length > 4) {
+            history.pop();
+        }
+        history.unshift(term); // Add new term to the beginning of the history array
         localStorage.setItem('search-history', JSON.stringify(history));
     }
     loadSearchHistory();
