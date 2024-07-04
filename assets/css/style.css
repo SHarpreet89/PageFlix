@@ -14,8 +14,13 @@ header {
     background-color: var(--feature);
 }
 
+header > h1 {
+    color: white;
+}
+
 h1 {
-    color: var(--white);
+    color: var(--black);
+    font: font-serif;
 }
 
 .search-bar input {
@@ -28,75 +33,100 @@ h1 {
     margin-right: 4px;
 }
 
+.mainMovieContainer  > img, .mainBookContainer > img {
+    min-height: 20rem;
+    max-height: 20rem;
+    width: auto;
+    margin-bottom: 20px;
+    display: inline-flex;
+} 
 
+.hovee-blue:hover {
+    background-color: #20205b; 
+    color: white;
+}
 
-.booksPane , .moviesPane {
-    min-height: 20vh;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.hover-green:hover {
+    background-color: #1e441f;  
+    color: white;
+}
+
+@media only screen and (max-width: 1080px) and (orientation: landscape) {
+
+    #moreItemCard {
+        height: 40vh;
+    }
+
+    #moreItemCard > div > img {
+        width: 90%;
+        margin-left: 5%;
+    }
+
+    #moreItemCard > div {
+        justify-items: center;
+        height: 100% !important;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+}
+
+@media only screen and (min-width: 1080px) {
+function loadSearchHistory() {
+    let history = JSON.parse(localStorage.getItem('search-history')) || [];
+    let searchHistoryList = $('#search-history');
+    searchHistoryList.empty();
+    history.forEach(item => {
+        let button = $('<button>')
+            .text(item)
+            .addClass('history-button bg-transparent hover:bg-[#232323] text-[#232323] font-semibold hover:text-white py-2 px-4 border border-[#C2405C] hover:border-transparent rounded lg:h-20 lg:text-sm lg:overflow-y-auto')
+            .on('click', function() {
+                searchItem.val(item);
+                searchButton.click();
+            });
+        let searchedItem = $('<div>').addClass('mr-1 ml-1 items-center').append(button);
+        searchHistoryList.append(searchedItem);
+    });
+}
+    .mainMovieContainer  > img, .mainBookContainer > img {
+        min-height: 30rem;
+        max-height: 30rem;
+        width: auto;
+        margin-bottom: 20px;
+        display: inline-flex;
+    } 
+
+    .subContainer { 
+        display: inline-flex;
+        justify-content: space-between;
+    }
+
+    #moreItemCard {
+        flex-direction: column;
+        width: 23%;
+        height: auto;
+        max-height: 35vh;
+        overflow-y: hidden;
+    }
+
+    #moreItemCard > #moreItemImageContainer {
+        width: 100%;
+        min-height: 13rem;
+        height: auto !important;
+        overflow-y: hidden;
+    }
+
+    #moreItemCard > img {
+        width: 100%;
+    }
+
+    .itemDescription {
+        min-height: 2rem;
+        max-height: 2rem;
+    }
 }
 
 #masterContainer {
     align-items: start;
-}
-
-
-.mainMovieContainer , .mainBookContainer {
-    width: 100%;
-    height: 80vh;
-    border: 1px solid #ccc;
-    padding: 10px;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.mainMovieContainer  > img, .mainBookContainer > img {
-    min-height: 500px;
-    max-height: 500px;
-    width: auto;
-    margin-bottom: 20px;
-} 
-
-@media only screen and (min-width: 767px) {
-   
-    .mainMovieContainer > img, .mainBookContainer > img {
-        min-height: 400px;
-        max-height: 400px;
-        margin-bottom: 10px;
-    }
-}
-
-
-@media only screen and (max-width: 767px) {
-   
-    .mainMovieContainer > img, .mainBookContainer > img {
-        min-height: Auto;
-        max-height: Auto;
-        margin-bottom: 10px;
-    }
-
-    .mainMovieContainer , .mainBookContainer {
-        width: 100%;
-        height: 50vh;
-        border: 1px solid #ccc;
-        padding: 10px;
-        box-sizing: border-box;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        overflow: hidden;
-    }
-}
-
-#moreItemCard > img {
-    min-height: 150px;
-    max-height: 150px;
-    width: auto;
-    margin-bottom: 8px;
 }
 
 .modal {
@@ -134,62 +164,6 @@ h1 {
     color: black;
     text-decoration: none;
     cursor: pointer;
-}
-
-.subContainer {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: nowrap;
-    height: 30%;
-    padding-top: 5vh;
-    justify-content: space-between;
-}
-
-#moreItemCard {
-    height: 100%;
-    width: 24%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-}
-
-.moreItemHeading {
-    height: 10%;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.moreItemYear {
-    height: 10%;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.moreItemImage {
-    height: 50%;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.moreItemDescription {
-    height: 30%;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.moreItemImage img {
-    height: 100%;
-    width: auto;
 }
 
 .history-button {

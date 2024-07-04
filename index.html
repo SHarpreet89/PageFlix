@@ -1,22 +1,26 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <title>PageFlix</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <!-- Link to jQuery UI CSS -->
     <link
       rel="stylesheet"
       href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"
     />
+    <!-- Link to Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Preconnect to Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Link to Google Fonts -->
     <link
       href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=DM+Serif+Display:ital@0;1&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" type="text/css" href="./assets/css/style.css" />
+    <!-- Tailwind CSS configuration -->
     <script>
       tailwind.config = {
         theme: {
@@ -29,85 +33,97 @@
         },
       };
     </script>
-  </head>
+    <!-- Link to custom CSS -->
+    <link rel="stylesheet" type="text/css" href="./assets/css/style.css" />
+</head>
 
-  <body class="flex flex-col min-h-screen">
-    <header class="sticky top-0 text-center text-5xl p-4">
-      <h1 class="font-serif">PageFlix.</h1>
-    </header>
+<body class="flex flex-col min-h-screen">
+  <!-- Header section -->
+  <header class="sticky top-0 text-center text-5xl p-4">
+    <h1 class="font-serif">PageFlix.</h1>
+  </header>
 
-    <div class="search-bar flex justify-center p-2 pt-5 mx-1">
-      <input
-        id="searchBar"
-        type="text"
-        placeholder="Search your favourite book..."
-        class="w-full lg:w-96 mr-1 rounded p-2"
-      />
-      <button
-        id="searchButton"
-        class="bg-transparent hover:bg-[#232323] text-[#232323] font-semibold hover:text-white py-2 px-4 border border-[#C2405C] hover:border-transparent rounded"
-      >
-        Search
-      </button>
+  <!-- Search bar section -->
+  <div class="search-bar flex justify-center p-2 pt-5 mx-1 lg-w-80">
+    <input
+      id="searchBar"
+      type="text"
+      placeholder="Search your favourite media..."
+      class="w-full lg:w-96 mr-1 rounded p-2"
+    />
+    <button id="searchButton" class="bg-transparent hover:bg-[#232323] text-[#232323] font-semibold hover:text-white py-2 px-4 border border-[#C2405C] hover:border-transparent rounded">Search</button>
+  </div>
+
+  <!-- Search history section -->
+  <div id="historyPane" class="border border-black rounded-lg py-2 px-4 mx-2 max-h-32 md:overflow-y-auto overflow-x-hidden">
+    <div class="flex flex-col md:flex-row items-center md:justify-start md:space-x-4">
+      <h2 class="text-base text-xl text-center md:text-left mb-2 md:mb-0">Recent Searches:</h2>
+      <div id="search-history" class="flex flex-col md:flex-row  md:overflow-x-auto whitespace-nowrap w-full"></div>
     </div>
-    <div id="historyPane" class="border border-black rounded-lg py-2 px-4 mx-2">
-      <h2 class="text-base">Recent Searches:</h2>
-      <div id="search-history"></div>
-    </div>
+  </div>
 
-    <main class="flex flex-col lg:flex-row flex-grow items-start">
-      <div
-        id="masterContainer"
-        class="flex flex-grow flex-col lg:flex-row justify-center items-center w-full items-start"
-      >
-        <div
-          class="booksPane w-full lg:w-1/2 p-2 flex flex-col flex-grow items-center"
-        >
-          <h1>BOOKS</h1>
-          <div
-            class="mainBookContainer flex-grow h-full m-3 border border-black rounded-lg bg-[#d4d4d4] text-center w-full p-4"
-          >
-            <h2 class="font-serif text-xl">See if your favourite book...</h2>
-            <p></p>
-          </div>
-        </div>
-
-        <div class="moviesPane w-full lg:w-1/2 p-2 flex flex-col items-center">
-          <h1>MOVIES</h1>
-          <div
-            class="mainMovieContainer flex-grow h-full m-3 border border-black rounded-lg bg-[#d4d4d4] text-center w-full p-4"
-          >
-            <h2 class="font-serif text-xl">...has been made into a movie!</h2>
-            <p></p>
-          </div>
+  <!-- Main content section -->
+  <main class="flex flex-col lg:flex-row flex-grow items-start">
+    <div id="masterContainer" class="flex flex-grow flex-col lg:flex-row justify-center items-center w-full items-start">
+      <!-- Books section -->
+      <div class="booksPane w-full lg:w-1/2 p-2 flex flex-col flex-grow justify-center items-center">
+        <h1 class="font-serif text-3xl text-center font-bold border-b-4 border-black rounded-lg bg-gradient-to-t from-rose-300 w-full p-2">BOOKS</h1>
+        <div class="mainBookContainer flex-grow justify-center justify-items-center text-center mt-0 m-3 mb-0 border border-black rounded-lg bg-[#d4d4d4] w-full p-4">
+          <h2 class="font-serif text-xl">See if your favourite book...</h2>
+          <p></p>
         </div>
       </div>
 
-      <div id="myModal" class="modal">
-        <div class="modal-content">
-          <span class="close">&times;</span>
-          <h2><strong>Welcome to PageFlix. </h2>
-          <p><em>Here on this webpage you can type in the title of a novel you are interested in and the application will perform a search on the movie equivalent.</em></strong> <br>Click "Begin" to get started!</p>
-          <button id="beginButton" class="bg-[#232323] text-white py-2 px-4 rounded">Begin</button>
+      <!-- Movies section -->
+      <div class="moviesPane w-full lg:w-1/2 p-2 flex flex-col items-center">
+        <h1 class="font-serif text-3xl text-center font-bold border-b-4 border-black rounded-lg bg-gradient-to-t from-rose-300 w-full p-2">MOVIES</h1>
+        <div class="mainMovieContainer flex-grow justify-center justify-items-center text-center mt-0 m-3 mb-0 border border-black rounded-lg bg-[#d4d4d4] w-full p-4">
+          <h2 class="font-serif text-xl">...has been made into a movie!</h2>
+          <p></p>
         </div>
       </div>
-    </main>
+    </div>
 
-    <footer class="bg-[#C2405C] text-center text-white p-2">
-      2024 Pageflix.
-    </footer>
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
-      crossorigin="anonymous"
-    ></script>
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
-    <script
-      src="https://cdn.jsdelivr.net/npm/dayjs@1.11.3/dayjs.min.js"
-      integrity="sha256-iu/zLUB+QgISXBLCW/mcDi/rnf4m4uEDO0wauy76x7U="
-      crossorigin="anonymous"
-    ></script>
-    <script src="./assets/js/script.js"></script>
-  </body>
+    <!-- Modal section -->
+    <div id="myModal" class="modal flex items-center justify-center rounded-lg">
+      <div class="modal-content text-center rounded-lg p-4">
+          <div class="flex justify-between items-center mb-4">
+              <h2 class="text-l text-center w-full"><strong>Welcome to PageFlix.</strong></h2>
+              <span class="close">&times;</span>
+          </div>
+          <div id="defaultModalContent">
+              <p><em>Here on this webpage you can type in the title of a novel/movie you are interested in and the application will perform a search to find the equivalent.</em></p>
+              <br>
+              <p><em>Clicking on secondary results on the bottom, will initiate a secondary search.</em></p>
+              <br>
+              <p><em>Enjoy your stay!</em></p>
+          </div>
+          <div id="modalMessageContainer" class="hidden">
+              <!-- This container will be populated with the message -->
+          </div>
+          <button id="modalButton" class="bg-rose-400 text-black text-xl font-bold w-64 py-2 px-4 rounded mt-4">Begin</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer section -->
+  <footer class="bg-[#C2405C] text-center text-white p-2">
+    2024 Pageflix.
+  </footer>
+
+  <!-- Scripts -->
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+    crossorigin="anonymous"
+  ></script>
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/dayjs@1.11.3/dayjs.min.js"
+    integrity="sha256-iu/zLUB+QgISXBLCW/mcDi/rnf4m4uEDO0wauy76x7U="
+    crossorigin="anonymous"
+  ></script>
+  <script src="./assets/js/script.js"></script>
+</body>
 </html>
