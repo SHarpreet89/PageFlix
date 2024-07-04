@@ -39,7 +39,7 @@ Click <a href="https://sharpreet89.github.io/PageFlix/"><strong>here<strong></a>
 ## Improvements
 <li>Adding links to the search results so the user can find a place to watch or purchase either media</li>
 <li>Refining the UI to showcase more of the content</li>
-<li>Adding more suggestive features, such as, if there is no adaptation it provides similar media based on author or genre</li
+<li>Adding more suggestive features, such as, if there is no adaptation it provides similar media based on author or genre</li>
 
 ## License
 MIT License
