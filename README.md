@@ -4,7 +4,8 @@
 Desktop view
 <img src="/assets/images/Desktop Screenshot.PNG">
 
-Mobilie view:
+Mobile view:
+
 <img src="/assets/images/Moblie Screenshot P1.PNG">
 <img src="/assets/images/Moblie Screenshot P2.PNG">
 
@@ -40,6 +41,7 @@ Click <a href="https://sharpreet89.github.io/PageFlix/"><strong>here<strong></a>
 <li>Adding links to the search results so the user can find a place to watch or purchase either media</li>
 <li>Refining the UI to showcase more of the content</li>
 <li>Adding more suggestive features, such as, if there is no adaptation it provides similar media based on author or genre</li
+
 
 ## License
 MIT License
