@@ -4,7 +4,7 @@
 Desktop view
 <img src="/assets/images/Desktop Screenshot.PNG">
 
-Mobilie view:
+Mobile view:
 <img src="/assets/images/Moblie Screenshot P1.PNG">
 <img src="/assets/images/Moblie Screenshot P2.PNG">
 
@@ -32,9 +32,9 @@ Click <a href="https://sharpreet89.github.io/PageFlix/"><strong>here<strong></a>
 <li><a href="https://github.com/dashboard">Phillip Lam</a></li>
 
 ## Contact Us
-<a href="S.harpreet@me.com">Harpreet Singh</a>
-<a href="ashlynjanexx@gmail.com">Ashlyn McGarry</a>
-<a href="philliplamm07@gmail.com">Phillip Lam</a>
+<li><a href="S.harpreet@me.com">Harpreet Singh</a></li>
+<li><a href="ashlynjanexx@gmail.com">Ashlyn McGarry</a></li>
+<li><a href="philliplamm07@gmail.com">Phillip Lam</a></li>
 
 ## Improvements
 <li>Adding links to the search results so the user can find a place to watch or purchase either media</li>
